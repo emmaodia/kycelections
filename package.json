@@ -1,0 +1,11 @@
+{
+  "name": "kycelections19",
+  "version": "1.0.0",
+  "description": "A Messenger ChatBot that provides information on Candidates vying for Electoral offices in the 2019 Nigeria Elections.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Emmanuel Oaikhenan",
+  "license": "Apache-2.0"
+}
