@@ -5,6 +5,7 @@ const
   express = require('express'),
   bodyParser = require('body-parser'),
   dotenv = require('dotenv'),
+  PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN,
   app = express().use(bodyParser.json()); // creates express http server
 
 
