@@ -48,7 +48,7 @@ app.post('/webhook', (req, res) => {
 app.get('/webhook', (req, res) => {
 
   // Your verify token. Should be a random string.
-  let VERIFY_TOKEN = "working"
+  let VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
   // Parse the query params
   let mode = req.query['hub.mode'];
@@ -67,7 +67,7 @@ app.get('/webhook', (req, res) => {
 
     } else {
       // Responds with '403 Forbidden' if verify tokens do not match
-      res.send("Error, Wrong Token!");
+      res.sendStatus(403);
     }
   }
 });
