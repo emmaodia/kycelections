@@ -14,6 +14,13 @@ dotenv.config()
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
+//Landing Page
+app.get('/', (req,res, next) => {
+  res.status(200).json({
+    message: "Hi I'm a ChatBot!"
+  })
+});
+
 // Creates the endpoint for our webhook
 app.post('/webhook', (req, res) => {
 
