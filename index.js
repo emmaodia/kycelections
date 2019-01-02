@@ -5,6 +5,7 @@ const
   express = require('express'),
   bodyParser = require('body-parser'),
   dotenv = require('dotenv'),
+  fb_token = process.env.FB_VERIFY_TOKEN,
   app = express().use(bodyParser.json()); // creates express http server
 
 dotenv.config();
@@ -48,7 +49,7 @@ app.post('/webhook', (req, res) => {
 app.get('/webhook', (req, res) => {
 
   // Your verify token. Should be a random string.
-  let VERIFY_TOKEN = process.env.VERIFY_TOKEN;
+  //let VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
   // Parse the query params
   let mode = req.query['hub.mode'];
@@ -59,7 +60,7 @@ app.get('/webhook', (req, res) => {
   if (mode && token) {
 
     // Checks the mode and token sent is correct
-    if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+    if (mode === 'subscribe' && token === fb_token) {
 
       // Responds with the challenge token from the request
       console.log('WEBHOOK_VERIFIED');
