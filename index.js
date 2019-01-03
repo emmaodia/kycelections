@@ -6,12 +6,9 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const
   express = require('express'),
   bodyParser = require('body-parser'),
-  dotenv = require('dotenv'),
   request = require('request'),
   app = express().use(bodyParser.json()); // creates express http server
 
-
-dotenv.config()
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
@@ -62,12 +59,29 @@ app.post('/webhook', (req, res) => {
 
 // Adds support for GET requests to our webhook
 app.get('/webhook', (req, res) => {
-    if (req.query['hub.mode'] === 'subscribe' &&
-        req.query['hub.verify_token'] == process.env.VERIFY_TOKEN ) {
-            res.status(200).send(req.query['hub.challenge']);
-        } else {
-            res.status(403).send('Error, you have passed wrong parameters')
-        }
+  /** UPDATE YOUR VERIFY TOKEN **/
+  const VERIFY_TOKEN = process.env,VERIFY_TOKEN;
+
+  // Parse params from the webhook verification request
+  let mode = req.query['hub.mode'];
+  let token = req.query['hub.verify_token'];
+  let challenge = req.query['hub.challenge'];
+
+  // Check if a token and mode were sent
+  if (mode && token) {
+
+   // Check the mode and token sent are correct
+   if (mode === 'subscribe' && token === VERIFY_TOKEN) {
+
+     // Respond with 200 OK and challenge token from the request
+     console.log('WEBHOOK_VERIFIED');
+     res.status(200).send(challenge);
+
+   } else {
+     // Responds with '403 Forbidden' if verify tokens do not match
+     res.sendStatus(403);
+   }
+  }
 });
 
 
