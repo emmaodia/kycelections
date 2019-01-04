@@ -41,9 +41,6 @@ app.post('/webhook', (req, res) => {
     handleMessage(sender_psid, webhook_event.message);
   } else if (webhook_event.postback) {
     handlePostback(sender_psid, webhook_event.postback);
-  }
-
-
   } else {
     // Returns a '404 Not Found' if event is not from a page subscription
     res.sendStatus(404);
