@@ -53,6 +53,13 @@ app.post('/webhook', (req, res) => {
 
 });
 
+//Landing Page
+app.get('/', (req, res, next) => {
+  res.status(200).json({
+    message: "ChatBot!"
+  })
+});
+
 // Adds support for GET requests to our webhook
 app.get('/webhook', (req, res) => {
 
