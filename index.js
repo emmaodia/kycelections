@@ -14,6 +14,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
+
+//Landing Page
+app.get('/', (req, res, next) => {
+  res.status(200).json({
+    message: "ChatBot!"
+  })
+});
+
 /// Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {
 
@@ -52,13 +60,6 @@ app.post('/webhook', (req, res) => {
     res.sendStatus(404);
   }
 
-});
-
-//Landing Page
-app.get('/', (req, res, next) => {
-  res.status(200).json({
-    message: "ChatBot!"
-  })
 });
 
 // Adds support for GET requests to our webhook
