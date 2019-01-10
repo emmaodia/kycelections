@@ -1,20 +1,37 @@
+/**
+ * Copyright 2017-present, Facebook, Inc. All rights reserved.
+ *
+ * This source code is licensed under the license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * Messenger Platform Quick Start Tutorial
+ *
+ * This is the completed code for the Messenger Platform quick start tutorial
+ *
+ * https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start/
+ *
+ * To run this code, you must do the following:
+ *
+ * 1. Deploy this code to a server running Node.js
+ * 2. Run `npm install`
+ * 3. Update the VERIFY_TOKEN
+ * 4. Add your PAGE_ACCESS_TOKEN to your environment vars
+ *
+ */
+
 'use strict';
-
-
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
-
 // Imports dependencies and set up http server
 const
-  express = require('express'),
-  bodyParser = require('body-parser'),
   request = require('request'),
-  app = express().use(bodyParser.json()); // creates express http server
-
+  express = require('express'),
+  body_parser = require('body-parser'),
+  app = express().use(body_parser.json()); // creates express http server
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
-/// Accepts POST requests at /webhook endpoint
+// Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {
 
   // Parse the request body from the POST
@@ -54,31 +71,24 @@ app.post('/webhook', (req, res) => {
 
 });
 
-//Landing Page
-app.get('/', (req, res, next) => {
-  res.status(200).json({
-    message: "ChatBot!"
-  })
-});
-
-// Adds support for GET requests to our webhook
+// Accepts GET requests at the /webhook endpoint
 app.get('/webhook', (req, res) => {
 
-  // Your verify token. Should be a random string.
-  let VERIFY_TOKEN = process.env.VERIFY_TOKEN;
+  /** UPDATE YOUR VERIFY TOKEN **/
+  const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
-  // Parse the query params
+  // Parse params from the webhook verification request
   let mode = req.query['hub.mode'];
   let token = req.query['hub.verify_token'];
   let challenge = req.query['hub.challenge'];
 
-  // Checks if a token and mode is in the query string of the request
+  // Check if a token and mode were sent
   if (mode && token) {
 
-    // Checks the mode and token sent is correct
+    // Check the mode and token sent are correct
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {
 
-      // Responds with the challenge token from the request
+      // Respond with 200 OK and challenge token from the request
       console.log('WEBHOOK_VERIFIED');
       res.status(200).send(challenge);
 
@@ -87,42 +97,47 @@ app.get('/webhook', (req, res) => {
       res.sendStatus(403);
     }
   }
-  // res.status(200).json({
-  //   message: "successful GET requests"
-  // })
 });
 
-// Handles messages events
 function handleMessage(sender_psid, received_message) {
-  let response = "Hello from your Bot!"
+  let response;
 
- // // Check if the message contains text
- // if (received_message.text) {
- //
- //   // Create the payload for a basic text message
- //   // response = {
- //   //   "text": `You sent the message: ${received_message.text}!`
- //   // }
- // }
+  // Checks if the message contains text
+  if (received_message.text) {
+    // Create the payload for a basic text message, which
+    // will be added to the body of our request to the Send API
+    response = {
+      "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
+    }
+  }
 
- // Sends the response message
- callSendAPI(sender_psid, response);
+  // Send the response message
+  callSendAPI(sender_psid, response);
 }
 
-// Handles messaging_postbacks events
 function handlePostback(sender_psid, received_postback) {
+  console.log('ok')
+   let response;
+  // Get the payload for the postback
+  let payload = received_postback.payload;
 
+  // Set the response based on the postback payload
+  if (payload === 'yes') {
+    response = { "text": "Thanks!" }
+  } else if (payload === 'no') {
+    response = { "text": "Oops, try sending another image." }
+  }
+  // Send the message to acknowledge the postback
+  callSendAPI(sender_psid, response);
 }
 
-// Sends response messages via the Send API
-function callSendAPI(sender_psid) {
+function callSendAPI(sender_psid, response) {
   // Construct the message body
   let request_body = {
-    "messaging_type": "RESPONSE",
     "recipient": {
       "id": sender_psid
-    }
-    //"message": response
+    },
+    "message": response
   }
 
   // Send the HTTP request to the Messenger Platform
