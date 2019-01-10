@@ -93,16 +93,16 @@ app.get('/webhook', (req, res) => {
 
 // Handles messages events
 function handleMessage(sender_psid, received_message) {
-  let response;
+  let response = "Hello from your Bot!"
 
- // Check if the message contains text
- if (received_message.text) {
-
-   // Create the payload for a basic text message
-   response = {
-     "text": `You sent the message: ${received_message.text}!`
-   }
- }
+ // // Check if the message contains text
+ // if (received_message.text) {
+ //
+ //   // Create the payload for a basic text message
+ //   // response = {
+ //   //   "text": `You sent the message: ${received_message.text}!`
+ //   // }
+ // }
 
  // Sends the response message
  callSendAPI(sender_psid, response);
@@ -114,14 +114,14 @@ function handlePostback(sender_psid, received_postback) {
 }
 
 // Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
+function callSendAPI(sender_psid) {
   // Construct the message body
   let request_body = {
     "messaging_type": "RESPONSE",
     "recipient": {
       "id": sender_psid
-    },
-    "message": response
+    }
+    //"message": response
   }
 
   // Send the HTTP request to the Messenger Platform
