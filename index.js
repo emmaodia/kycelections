@@ -1,8 +1,9 @@
 'use strict';
 
-// Imports dependencies and set up http server
+
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
+// Imports dependencies and set up http server
 const
   express = require('express'),
   bodyParser = require('body-parser'),
@@ -30,7 +31,7 @@ app.post('/webhook', (req, res) => {
 
 
       // Get the sender PSID
-      let sender_psid = webhook_event.id;
+      let sender_psid = webhook_event.sender.id;
       console.log('Sender ID: ' + sender_psid);
 
       // Check if the event is a message or postback and
