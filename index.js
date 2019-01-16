@@ -13,7 +13,7 @@
  * To run this code, you must do the following:
  *
  * 1. Deploy this code to a server running Node.js
- * 2. Run `npm install`
+ * 2. Run `npm install
  * 3. Update the VERIFY_TOKEN
  * 4. Add your PAGE_ACCESS_TOKEN to your environment vars
  *
@@ -56,7 +56,7 @@ app.post('/webhook', (req, res) => {
       if (webhook_event.message) {
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
-
+        presidentialCandidates(sender_psid, webhook_event.postback);
         handlePostback(sender_psid, webhook_event.postback);
       }
 
@@ -159,6 +159,71 @@ function handlePostback(sender_psid, received_postback) {
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
+}
+
+function presidentialCandidates(sender_psid, text1) {
+  let text = text1.toLowerCase()
+  if(text.includes("president")){
+      response = {
+          "attachment":{
+          "type":"template",
+          "payload":{
+            "template_type":"generic",
+            "elements":[
+               {
+                "title":"Welcome!",
+                "image_url":"https://petersfancybrownhats.com/company_image.png",
+                "subtitle":"We have the right hat for everyone.",
+                "default_action": {
+                  "type": "web_url",
+                  "url": "https://petersfancybrownhats.com/view?item=103",
+                  "webview_height_ratio": "tall",
+                },
+                "buttons":[
+                  {
+                    "type":"web_url",
+                    "url":"https://petersfancybrownhats.com",
+                    "title":"View Website"
+                  },{
+                    "type":"postback",
+                    "title":"Start Chatting",
+                    "payload":"DEVELOPER_DEFINED_PAYLOAD"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+  }else if ("political parties"){
+
+  }else{
+    callSendAPI(sender_psid, "Select a valid option")
+  }
+}
+
+function sendButtonMessage(sender_psid, text){
+  let messageData = {
+    "attachment":{
+      "type":"template",
+      "payload":{
+        "template_type":"button",
+        "text":"Please select an action",
+        "buttons":[
+          {
+            "type":"postback",
+            "title":"Presidential Candidates",
+            "payload":"presidentialCandidates"
+          },
+          {
+            "type":"postback",
+            "title":"Political Parties",
+            "payload":"Political Parties"
+          }
+        ]
+      }
+    }
+  }
 }
 
 function callSendAPI(sender_psid, response) {
