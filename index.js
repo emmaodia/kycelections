@@ -99,6 +99,14 @@ app.get('/webhook', (req, res) => {
   }
 });
 
+function getStarted(sender_psid){
+  let message = {
+    "get_started":{
+      "payload":"<GET_STARTED_PAYLOAD>"
+    }
+  }
+}
+
 function handleMessage(sender_psid, received_message) {
   let response;
 
