@@ -56,7 +56,7 @@ app.post('/webhook', (req, res) => {
       if (webhook_event.message) {
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
-        presidentialCandidates(sender_psid, webhook_event.postback);
+
         handlePostback(sender_psid, webhook_event.postback);
       }
 
@@ -117,24 +117,20 @@ function handleMessage(sender_psid, received_message) {
       "attachment": {
         "type": "template",
         "payload": {
-          "template_type": "generic",
-          "elements": [{
-            "title": "Is this the right picture?",
-            "subtitle": "Tap a button to answer.",
-            "image_url": attachment_url,
-            "buttons": [
-              {
-                "type": "postback",
-                "title": "Yes!",
-                "payload": "yes",
-              },
-              {
-                "type": "postback",
-                "title": "No!",
-                "payload": "no",
-              }
-            ],
-          }]
+          "template_type": "button",
+          "text":"Please select an action",
+          "buttons":[
+            {
+              "type":"postback",
+              "title":"Presidential Candidates",
+              "payload":"presidentialCandidates"
+            },
+            {
+              "type":"postback",
+              "title":"Political Parties",
+              "payload":"Political Parties"
+            }
+          ]
         }
       }
     }
