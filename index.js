@@ -56,7 +56,7 @@ app.post('/webhook', (req, res) => {
       if (webhook_event.message) {
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
-
+        handleGetStarted(sender_psid, webhook_event.postback);
         handlePostback(sender_psid, webhook_event.postback);
       }
 
@@ -101,10 +101,38 @@ app.get('/webhook', (req, res) => {
 
 function getStarted(sender_psid){
   let message = {
-    "get_started":{
-      "payload":"<GET_STARTED_PAYLOAD>"
+    "attachment": {
+      "get_started":{
+        "payload":"GET STARTED"
+      }
     }
   }
+}
+
+function handleGetStarted(sender_psid, received_postback) {
+  let response;
+
+  // Get the payload for the postback
+  let payload = received_postback.payload;
+
+  / Set the response based on the postback payload
+  if (payload === 'GET STARTED') {
+      response = { "text": "Here is a quick reply!",
+      "quick_replies":[
+        {
+          "content_type":"text",
+          "title":"Presidential Aspirants",
+          "payload":"<DEVELOPER_DEFINED_PAYLOAD>"
+        },
+        {
+          "content_type":"text",
+          "title":"<BUTTON_TEXT>",
+          "payload":"<DEVELOPER_DEFINED_PAYLOAD>"
+        }
+      ]
+    }
+  }
+  callSendAPI(sender_psid, response);
 }
 
 function handleMessage(sender_psid, received_message) {
