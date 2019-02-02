@@ -100,6 +100,36 @@ app.get('/webhook', (req, res) => {
   }
 });
 
+function getStarted(sender_psid, action){
+  let response;
+
+  if (action){
+    response = {
+      "get_started":{
+        {
+          "type": "postback",
+          "title": "GET STARTED",
+          "payload": "start"
+        }
+      }
+    }
+  }
+}
+
+function getStartedPostback(sender_psid, received_postback){
+  console.log('ok')
+   let response;
+  // Get the payload for the postback
+  let payload = received_postback.payload;
+
+  // Set the response based on the postback payload
+  if (payload === 'start') {
+    response = { "text": "Welcome to KYC Bot" }
+  }
+  // Send the message to acknowledge the postback
+  callSendAPI(sender_psid, response);
+}
+
 function handleMessage(sender_psid, received_message) {
   let response;
 
