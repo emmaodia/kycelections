@@ -1,3 +1,4 @@
+
 /**
  * Copyright 2017-present, Facebook, Inc. All rights reserved.
  *
@@ -13,7 +14,7 @@
  * To run this code, you must do the following:
  *
  * 1. Deploy this code to a server running Node.js
- * 2. Run `npm install
+ * 2. Run `npm install`
  * 3. Update the VERIFY_TOKEN
  * 4. Add your PAGE_ACCESS_TOKEN to your environment vars
  *
@@ -56,7 +57,7 @@ app.post('/webhook', (req, res) => {
       if (webhook_event.message) {
         handleMessage(sender_psid, webhook_event.message);
       } else if (webhook_event.postback) {
-        handleGetStarted(sender_psid, webhook_event.postback);
+
         handlePostback(sender_psid, webhook_event.postback);
       }
 
@@ -75,7 +76,7 @@ app.post('/webhook', (req, res) => {
 app.get('/webhook', (req, res) => {
 
   /** UPDATE YOUR VERIFY TOKEN **/
-  const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
+  const VERIFY_TOKEN = "<YOUR VERIFY TOKEN>";
 
   // Parse params from the webhook verification request
   let mode = req.query['hub.mode'];
@@ -99,73 +100,6 @@ app.get('/webhook', (req, res) => {
   }
 });
 
-// function getStarted(sender_psid){
-//   let message = {
-//     "attachment": {
-//       "get_started":{
-//         "payload":"GET STARTED"
-//       }
-//     }
-//   }
-// }
-
-
-//This section is for the Getting Started Button
-function handleGetStarted(sender_psid, received_postback) {
-  let response;
-
-  // Get the payload for the postback
-  let payload = received_postback.payload;
-
-  // Set the response based on the postback payload
-  if (payload === 'GET STARTED') {
-      response = {
-      "get_started":{
-        "payload":"GET STARTED"
-      }
-    }
-  }
-  callSendAPI(sender_psid, response);
-}
-
-
-function handleGetStartedPostback(sender_psid, received_postback) {
-  let response;
-
-  // Get the payload for the postback
-  let payload = received_postback.payload;
-
-  // Set the response based on the postback payload
-  if (payload === 'GET STARTED') {
-    response = {
-      "text": "Hi! I am a Bot called KYC and I can tell you the Candidates of the 2019 Nigeria Elections",
-      "attachment": {
-        "type": "template",
-        "payload": {
-          "template_type": "button",
-          "text":"Please select an action",
-          "buttons":[
-            {
-              "type":"postback",
-              "title":"Presidential Candidates",
-              "payload":"presidentialCandidates"
-            },
-            {
-              "type":"postback",
-              "title":"Political Parties",
-              "payload":"Political Parties"
-            }
-          ]
-        }
-       }
-  } else if (payload === 'no') {
-    response = { "text": "Oops, try sending another image." }
-  }
-  // Send the message to acknowledge the postback
-  callSendAPI(sender_psid, response);
-}
-}
-
 function handleMessage(sender_psid, received_message) {
   let response;
 
@@ -177,31 +111,33 @@ function handleMessage(sender_psid, received_message) {
       "text": `You sent the message: "${received_message.text}". Now send me an attachment!`
     }
   } else if (received_message.attachments) {
-
-    // Gets the URL of the message attachment
+    // Get the URL of the message attachment
     let attachment_url = received_message.attachments[0].payload.url;
     response = {
       "attachment": {
         "type": "template",
         "payload": {
-          "template_type": "button",
-          "text":"Please select an action",
-          "buttons":[
-            {
-              "type":"postback",
-              "title":"Presidential Candidates",
-              "payload":"presidentialCandidates"
-            },
-            {
-              "type":"postback",
-              "title":"Political Parties",
-              "payload":"Political Parties"
-            }
-          ]
+          "template_type": "generic",
+          "elements": [{
+            "title": "Is this the right picture?",
+            "subtitle": "Tap a button to answer.",
+            "image_url": attachment_url,
+            "buttons": [
+              {
+                "type": "postback",
+                "title": "Yes!",
+                "payload": "yes",
+              },
+              {
+                "type": "postback",
+                "title": "No!",
+                "payload": "no",
+              }
+            ],
+          }]
         }
       }
     }
-
   }
 
   // Send the response message
@@ -209,8 +145,8 @@ function handleMessage(sender_psid, received_message) {
 }
 
 function handlePostback(sender_psid, received_postback) {
-  let response;
-
+  console.log('ok')
+   let response;
   // Get the payload for the postback
   let payload = received_postback.payload;
 
@@ -224,91 +160,9 @@ function handlePostback(sender_psid, received_postback) {
   callSendAPI(sender_psid, response);
 }
 
-function presidentialCandidates(sender_psid, text1) {
-  let text = text1.toLowerCase()
-  if(text.includes("president")){
-      response = {
-          "attachment":{
-          "type":"template",
-          "payload":{
-            "template_type":"generic",
-            "elements":[
-               {
-                "title":"Welcome!",
-                "image_url":"https://petersfancybrownhats.com/company_image.png",
-                "subtitle":"We have the right hat for everyone.",
-                "default_action": {
-                  "type": "web_url",
-                  "url": "https://petersfancybrownhats.com/view?item=103",
-                  "webview_height_ratio": "tall",
-                },
-                "buttons":[
-                  {
-                    "type":"web_url",
-                    "url":"https://petersfancybrownhats.com",
-                    "title":"View Website"
-                  },{
-                    "type":"postback",
-                    "title":"Start Chatting",
-                    "payload":"DEVELOPER_DEFINED_PAYLOAD"
-                  }
-                ]
-              }
-            ]
-          }
-        }
-      }
-  }else if ("political parties"){
-
-  }else{
-    callSendAPI(sender_psid, response)
-  }
-}
-
-function handlePresidentialCandidatesPostback(sender_psid, received_postback) {
-  console.log('ok')
-   let response;
-  // Get the payload for the postback
-  let payload = received_postback.payload;
-
-  // Set the response based on the postback payload
-  if (payload === 'president') {
-    response = { "text": "Thanks!" }
-  } else if (payload === 'no') {
-    response = { "text": "Oops, try sending another image." }
-  }
-  // Send the message to acknowledge the postback
-  callSendAPI(sender_psid, response);
-}
-
-function sendButtonMessage(sender_psid, text){
-  let messageData = {
-    "attachment":{
-      "type":"template",
-      "payload":{
-        "template_type":"button",
-        "text":"Please select an action",
-        "buttons":[
-          {
-            "type":"postback",
-            "title":"Presidential Candidates",
-            "payload":"presidentialCandidates"
-          },
-          {
-            "type":"postback",
-            "title":"Political Parties",
-            "payload":"Political Parties"
-          }
-        ]
-      }
-    }
-  }
-}
-
 function callSendAPI(sender_psid, response) {
   // Construct the message body
   let request_body = {
-    "messaging_type": "RESPONSE",
     "recipient": {
       "id": sender_psid
     },
