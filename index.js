@@ -27,6 +27,7 @@ const
   request = require('request'),
   express = require('express'),
   body_parser = require('body-parser'),
+  getStartedRouter = require('./routes/getStarted'),
   app = express().use(body_parser.json()); // creates express http server
 
 // Sets server port and logs message on success
@@ -100,6 +101,8 @@ app.get('/webhook', (req, res) => {
   }
 });
 
+
+app.use('/setup', getStartedRouter)
 function getStarted(sender_psid, action){
   let response = {
     "get_started":{
