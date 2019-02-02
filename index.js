@@ -106,11 +106,7 @@ function getStarted(sender_psid, action){
   if (action){
     response = {
       "get_started":{
-        {
-          "type": "postback",
-          "title": "GET STARTED",
           "payload": "start"
-        }
       }
     }
   }
