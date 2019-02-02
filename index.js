@@ -101,13 +101,9 @@ app.get('/webhook', (req, res) => {
 });
 
 function getStarted(sender_psid, action){
-  let response;
-
-  if (action){
-    response = {
-      "get_started":{
-          "payload": "start"
-      }
+  let response = {
+    "get_started":{
+        "payload": "start"
     }
   }
 }
