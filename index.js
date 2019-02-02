@@ -99,16 +99,18 @@ app.get('/webhook', (req, res) => {
   }
 });
 
-function getStarted(sender_psid){
-  let message = {
-    "attachment": {
-      "get_started":{
-        "payload":"GET STARTED"
-      }
-    }
-  }
-}
+// function getStarted(sender_psid){
+//   let message = {
+//     "attachment": {
+//       "get_started":{
+//         "payload":"GET STARTED"
+//       }
+//     }
+//   }
+// }
 
+
+//This section is for the Getting Started Button
 function handleGetStarted(sender_psid, received_postback) {
   let response;
 
@@ -161,6 +163,7 @@ function handleGetStartedPostback(sender_psid, received_postback) {
   }
   // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
+}
 }
 
 function handleMessage(sender_psid, received_message) {
@@ -258,8 +261,24 @@ function presidentialCandidates(sender_psid, text1) {
   }else if ("political parties"){
 
   }else{
-    callSendAPI(sender_psid, "Select a valid option")
+    callSendAPI(sender_psid, response)
   }
+}
+
+function handlePresidentialCandidatesPostback(sender_psid, received_postback) {
+  console.log('ok')
+   let response;
+  // Get the payload for the postback
+  let payload = received_postback.payload;
+
+  // Set the response based on the postback payload
+  if (payload === 'president') {
+    response = { "text": "Thanks!" }
+  } else if (payload === 'no') {
+    response = { "text": "Oops, try sending another image." }
+  }
+  // Send the message to acknowledge the postback
+  callSendAPI(sender_psid, response);
 }
 
 function sendButtonMessage(sender_psid, text){
