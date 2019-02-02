@@ -115,23 +115,51 @@ function handleGetStarted(sender_psid, received_postback) {
   // Get the payload for the postback
   let payload = received_postback.payload;
 
-  / Set the response based on the postback payload
+  // Set the response based on the postback payload
   if (payload === 'GET STARTED') {
-      response = { "text": "Here is a quick reply!",
-      "quick_replies":[
-        {
-          "content_type":"text",
-          "title":"Presidential Aspirants",
-          "payload":"<DEVELOPER_DEFINED_PAYLOAD>"
-        },
-        {
-          "content_type":"text",
-          "title":"<BUTTON_TEXT>",
-          "payload":"<DEVELOPER_DEFINED_PAYLOAD>"
-        }
-      ]
+      response = {
+      "get_started":{
+        "payload":"GET STARTED"
+      }
     }
   }
+  callSendAPI(sender_psid, response);
+}
+
+
+function handleGetStartedPostback(sender_psid, received_postback) {
+  let response;
+
+  // Get the payload for the postback
+  let payload = received_postback.payload;
+
+  // Set the response based on the postback payload
+  if (payload === 'GET STARTED') {
+    response = {
+      "text": "Hi! I am a Bot called KYC and I can tell you the Candidates of the 2019 Nigeria Elections",
+      "attachment": {
+        "type": "template",
+        "payload": {
+          "template_type": "button",
+          "text":"Please select an action",
+          "buttons":[
+            {
+              "type":"postback",
+              "title":"Presidential Candidates",
+              "payload":"presidentialCandidates"
+            },
+            {
+              "type":"postback",
+              "title":"Political Parties",
+              "payload":"Political Parties"
+            }
+          ]
+        }
+       }
+  } else if (payload === 'no') {
+    response = { "text": "Oops, try sending another image." }
+  }
+  // Send the message to acknowledge the postback
   callSendAPI(sender_psid, response);
 }
 
