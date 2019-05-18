@@ -29,9 +29,17 @@ const
   body_parser = require('body-parser'),
   getStartedRouter = require('./routes/getStarted'),
   app = express().use(body_parser.json()); // creates express http server
+  app.use(body_parser.urlencoded({ extended: false }));
 
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
+
+app.get('/api/v1', (req, res, next) => {
+  res.status(200).json({
+    message: "This is the API entry point"
+  })
+});
+
 
 // Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {
