@@ -11,8 +11,6 @@ const infoSetSchema = mongoose.Schema({
   party: : { type: String },
 });
 
-const dbConfig = { url: 'mongodb://localhost:27017/kycelections19'};
-
 mongoose.Promise = global.Promise;
 
 module.exports = mongoose.model('infoSet', infoSetSchema);

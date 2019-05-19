@@ -1,6 +1,7 @@
 const express = require('express');
 const body_parser = require('body-parser');
 const path = require('path');
+const mongoose = require('mongoose');
 const app = express();
 
 const infoSetRouter = require('./routes/infoSet');
@@ -23,6 +24,18 @@ app.get('/api/v1/', (req, res, next) => {
 });
 
 app.use('/api/v1/infoSet', infoSetRouter)
+
+//Database Setup
+const dbConfig = { url: 'mongodb://localhost:27017/kycelections19'};
+
+mongoose.connect(dbConfig.url)
+.then(() => {
+  console.log("Database Connection Successful!");
+})
+.catch(err => {
+  console.log(`Exiting... Cannot connect due to error: ${err}`);
+  process.exit();
+});
 
 //Error Handling set up
 app.use((req, res, next) => {
