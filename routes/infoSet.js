@@ -4,10 +4,14 @@ const mongoose = require('mongoose');
 
 const InfoSet = require('../api/models/infoSet');
 
-router.get('/', (req, res, next) => {
-  console.log("Yes!");
-  process.exit();
-});
+// router.get('/', (req, res, next) => {
+//   InfoSet.find()
+//   .select('_id name office party')
+//   .exec()
+//   .then(results => {
+//
+//   })
+// });
 
 router.post('/', (req, res, next) => {
   const infoSet = new InfoSet({
@@ -31,6 +35,9 @@ router.post('/', (req, res, next) => {
   })
   .catch(error => {
     console.log(`Info could not be created! due to: ${error}`);
+    res.status(500).json({
+      error: error
+    })
   })
 })
 

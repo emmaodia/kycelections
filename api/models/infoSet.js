@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const infoSetSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  name: { type: String },
+  name: { type: String, required: true },
   office: { type: String },
   //website: : { type: String },
   // wikiLink: : { type: String },
