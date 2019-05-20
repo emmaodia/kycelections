@@ -4,14 +4,29 @@ const mongoose = require('mongoose');
 
 const InfoSet = require('../api/models/infoSet');
 
-// router.get('/', (req, res, next) => {
-//   InfoSet.find()
-//   .select('_id name office party')
-//   .exec()
-//   .then(results => {
-//
-//   })
-// });
+router.get('/', (req, res, next) => {
+  InfoSet.find()
+  .select('_id name office party')
+  .exec()
+  .then(results => {
+      responses = {
+        infoSet: results.map(result => {
+          return {
+            _id: result.id,
+            name: result.name,
+            office: result.office,
+            party: result.party
+          }
+        })
+      }
+      res.status(200).json(responses)
+  })
+  .catch(error => {
+    res.status(500).json({
+      error: error
+    })
+  })
+});
 
 router.post('/', (req, res, next) => {
   const infoSet = new InfoSet({
