@@ -34,11 +34,11 @@ const
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
-app.get('/api/v1', (req, res, next) => {
-  res.status(200).json({
-    message: "This is the API entry point"
-  })
-});
+// app.get('/api/v1', (req, res, next) => {
+//   res.status(200).json({
+//     message: "This is the API entry point"
+//   })
+// });
 
 
 // Accepts POST requests at /webhook endpoint
