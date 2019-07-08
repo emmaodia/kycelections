@@ -28,7 +28,7 @@ app.use('/api/v1/infoSet', infoSetRouter)
 //Database Setup
 const dbConfig = { url: 'mongodb://localhost:27017/kycelections19'};
 
-mongoose.connect(dbConfig.url)
+mongoose.connect(process.env.MONGODB_URI || dbConfig.url)
 .then(() => {
   console.log("Database Connection Successful!");
 })
